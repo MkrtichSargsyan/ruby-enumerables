@@ -10,6 +10,18 @@ module Enumerable
       index += 1
     end
   end
+
+  def my_select
+    filtered_arr = []
+    each do |el|
+      yield(el) && filtered_arr.push(el)
+    end
+    filtered_arr
+  end
 end
 
-[1, 2, 6].my_each_with_index { |el, index| puts el, index }
+newArr = [1, 2, 6].my_select do |el|
+  el.even?
+end
+
+puts newArr
