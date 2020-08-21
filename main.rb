@@ -18,10 +18,27 @@ module Enumerable
     end
     filtered_arr
   end
+
+  def my_all
+    booleansArr = []
+
+    each do |el|
+      booleansArr.push(yield(el))
+      p booleansArr
+    end
+
+    booleansArr.my_each do |el|
+      if el
+        next
+      else
+        p false
+        next
+      end
+    end
+    p true
+  end
 end
 
-newArr = [1, 2, 6].my_select do |el|
-  el.even?
+[2, 2, 3, 2].my_all do |el|
+  el == 2
 end
-
-puts newArr
