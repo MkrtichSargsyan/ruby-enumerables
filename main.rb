@@ -1,44 +1,44 @@
 module Enumerable
   def my_each
-    each { |el| yield el }
+    while length != 0
+      yield first
+      shift
+    end
   end
 
   def my_each_with_index
     index = 0
-    each do |el|
-      yield(el, index)
+    while length != 0
+      yield "element is #{first}, index is  #{index}"
+      shift
       index += 1
     end
   end
 
   def my_select
     filtered_arr = []
-    each do |el|
-      yield(el) && filtered_arr.push(el)
+
+    while length != 0
+      yield(first) && filtered_arr.push(first)
+      shift
     end
+
     filtered_arr
   end
 
-  def my_all
-    booleansArr = []
+  def my_all?
+    output = true
 
-    each do |el|
-      booleansArr.push(yield(el))
-      p booleansArr
-    end
-
-    booleansArr.my_each do |el|
-      if el
-        next
+    while length != 0
+      if !yield(first)
+        output = false
+        break
       else
-        p false
-        next
+        shift
       end
     end
-    p true
+    output
   end
 end
 
-[2, 2, 3, 2].my_all do |el|
-  el == 2
-end
+[5, 5, 5, 5, 5, 5].my_all? { |el| el == 5 }
