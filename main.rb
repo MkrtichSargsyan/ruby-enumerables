@@ -1,4 +1,6 @@
 module Enumerable
+  # my-each
+
   def my_each
     ind = 0
 
@@ -6,7 +8,11 @@ module Enumerable
       yield self[ind]
       ind += 1
     end
+
+    self
   end
+
+  # my_each_with_index
 
   def my_each_with_index
     index = 0
@@ -14,7 +20,11 @@ module Enumerable
       yield(el, index)
       index += 1
     end
+
+    self
   end
+
+  # my_select
 
   def my_select
     filtered_arr = []
@@ -26,6 +36,8 @@ module Enumerable
 
     filtered_arr
   end
+
+  # my_all
 
   def my_all?
     output = true
@@ -41,6 +53,8 @@ module Enumerable
     output
   end
 
+  # my_any
+
   def my_any?
     output = false
     my_each do |el|
@@ -51,6 +65,8 @@ module Enumerable
     end
     output
   end
+
+  # my_none
 
   def my_none?
     output = true
@@ -66,6 +82,8 @@ module Enumerable
     output
   end
 
+  # my_count
+
   def my_count
     count = 0
 
@@ -75,25 +93,17 @@ module Enumerable
     count
   end
 
-  # def my_map
-  #   new_arr = []
-
-  #   my_each do |el|
-  #     new_arr.push(yield(el))
-  #   end
-
-  #   new_arr
-  # end
+  # my_map
 
   def my_map(&proc_block)
     new_arr = []
 
-    my_each do |el|
-      new_arr.push(proc_block.call(el))
-    end
+    my_each { |el| new_arr.push(proc_block.call(el)) }
 
     new_arr
   end
+
+  # my_inject
 
   def my_inject(num)
     output = num
@@ -103,14 +113,10 @@ module Enumerable
     end
     output
   end
-
 end
+
+# multiply_els
 
 def multiply_els(arr)
-  arr.my_inject(1) {|acc, sum| acc * sum}
+  arr.my_inject(1) { |acc, sum| acc * sum }
 end
-
-p = Proc.new { |el| el * 3 }
-
-# p multiply_els([2,4,5])
-puts [4, 2, 3].my_map { |el| el * 3 }
