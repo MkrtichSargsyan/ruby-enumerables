@@ -1,8 +1,10 @@
 module Enumerable
   def my_each
-    while length != 0
-      yield first
-      shift
+    ind = 0
+
+    while ind != length
+      yield self[ind]
+      ind += 1
     end
   end
 
@@ -44,7 +46,7 @@ module Enumerable
     my_each do |el|
       if yield el
         output = true
-        break 
+        break
       end
     end
     output
@@ -54,12 +56,12 @@ module Enumerable
     output = true
 
     while length != 0
-       if yield first
+      if yield first
         output = false
         break
       else
         shift
-       end
+      end
     end
     output
   end
@@ -72,6 +74,25 @@ module Enumerable
     end
     count
   end
+
+  def my_map
+    new_arr = []
+
+    my_each do |el|
+      new_arr.push(yield(el))
+    end
+
+    new_arr
+  end
+
+  def my_inject(num)
+    output = num
+
+    my_each do |sum|
+      output = yield(output, sum)
+    end
+    output
+  end
 end
 
-puts [4,3,5].my_count { |el| el.odd? }
+# p [50, 5].my_inject(1) { |acc, sum| acc -= sum }
