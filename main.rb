@@ -8,9 +8,8 @@ module Enumerable
 
   def my_each_with_index
     index = 0
-    while length != 0
-      yield "element is #{first}, index is  #{index}"
-      shift
+    my_each do |el|
+      yield(el, index)
       index += 1
     end
   end
@@ -39,6 +38,40 @@ module Enumerable
     end
     output
   end
+
+  def my_any?
+    output = false
+    my_each do |el|
+      if yield el
+        output = true
+        break 
+      end
+    end
+    output
+  end
+
+  def my_none?
+    output = true
+
+    while length != 0
+       if yield first
+        output = false
+        break
+      else
+        shift
+       end
+    end
+    output
+  end
+
+  def my_count
+    count = 0
+
+    my_each do |el|
+      yield(el) && count += 1
+    end
+    count
+  end
 end
 
-[5, 5, 5, 5, 5, 5].my_all? { |el| el == 5 }
+puts [4,3,5].my_count { |el| el.odd? }
