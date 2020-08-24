@@ -75,11 +75,21 @@ module Enumerable
     count
   end
 
-  def my_map
+  # def my_map
+  #   new_arr = []
+
+  #   my_each do |el|
+  #     new_arr.push(yield(el))
+  #   end
+
+  #   new_arr
+  # end
+
+  def my_map(&proc_block)
     new_arr = []
 
     my_each do |el|
-      new_arr.push(yield(el))
+      new_arr.push(proc_block.call(el))
     end
 
     new_arr
@@ -93,6 +103,14 @@ module Enumerable
     end
     output
   end
+
 end
 
-# p [50, 5].my_inject(1) { |acc, sum| acc -= sum }
+def multiply_els(arr)
+  arr.my_inject(1) {|acc, sum| acc * sum}
+end
+
+p = Proc.new { |el| el * 3 }
+
+# p multiply_els([2,4,5])
+puts [4, 2, 3].my_map { |el| el * 3 }
