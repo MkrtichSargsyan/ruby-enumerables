@@ -34,7 +34,7 @@ module Enumerable
   def my_select
     return to_enum(:my_select) unless block_given?
 
-    filtered=[]
+    filtered = []
 
     if self.class == Hash
       filtered = {}
@@ -44,25 +44,19 @@ module Enumerable
         value = el [1]
         # p "key = #{key}"
         # p "value = #{value}"
-  
-        if yield(el[0]) 
-        
-            filtered [key] = value
-        end 
+
+        filtered [key] = value if yield(el[0])
       end
 
       filtered
 
-      else
+    else
 
-        filtered = [] 
+      filtered = []
 
-        my_each do |el|
-          if yield(el) 
-          
-              filtered.push(el)
-          end 
-        end
+      my_each do |el|
+        filtered.push(el) if yield(el)
+      end
     end
 
     filtered
@@ -72,13 +66,12 @@ module Enumerable
 
   def my_all?
     # return false unless block_given?
-    if !block_given?
-      return false
-    end
+    return false unless block_given?
+
     output = true
 
     my_each do |el|
-      if !yield(el)
+      unless yield(el)
         output = false
         break
       end
@@ -127,7 +120,6 @@ module Enumerable
   # my_count
 
   def my_count(num = nil)
-   
     if num
       selected = my_select { |el| el == num }
       selected.length
@@ -141,8 +133,6 @@ module Enumerable
       end
       count
     end
-
-  
   end
 
   # my_map
@@ -163,15 +153,23 @@ module Enumerable
 
   # my_inject
 
-  def my_inject(num = 0)
-    raise LocalJumpError.new "no block given" unless block_given?
+  def my_inject(num = nil)
 
 
-    output = num
+    raise LocalJumpError, 'no block given' unless block_given?
+
+    type = self[0].class
+
+    if num.nil?
+      num = type == String ? '' : 0
+    end
+
+    num.class == Float || Integer ? output = num : output = num.to_s
 
     my_each do |sum|
       output = yield(output, sum)
     end
+
     output
   end
 end
@@ -182,22 +180,5 @@ def multiply_els(arr)
   arr.my_inject(1) { |acc, sum| acc * sum }
 end
 
-#  k = {2 => '23435',3 => '23dfgdf435'}.count
-#  p k
-#  d = {2 => '23435',3 => '23dfgdf435'}.my_count
-#  p d
-
-#  k = [1,2,3,4,5,6,7,5].count {|el| el == 5}
-#  p k 
-#  d = [1,2,3,4,5,6,5,7,5].my_count {|el| el == 5}
-#  p d
-
-# k = (1..5).count(2) {|el| el == 5}
-# p k
-# d = (1..5).my_count(2) {|el| el == 5}
-# p d
-
-p = Proc.new{|el| el*2}
-
-# puts [2,4,5].inject 
-puts (1..5).my_inject(1) {|acc, el| acc *= el}
+# puts %w[a b c].my_inject(:"fsdfs") { |acc, el| acc + el }
+puts [2,5,6].my_inject(5) { |acc, el| acc + el }
