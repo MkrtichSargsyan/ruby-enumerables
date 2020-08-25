@@ -147,10 +147,16 @@ module Enumerable
 
   # my_map
 
-  def my_map(&proc_block)
+  def my_map(proc_block = nil)
+    return to_enum(:my_map) unless block_given?
+
     new_arr = []
 
-    my_each { |el| new_arr.push(proc_block.call(el)) }
+    if proc_block.class == Proc and block_given?
+      my_each { |el| new_arr.push(proc_block.call(el)) }
+    else
+      my_each { |el| new_arr.push(yield(el)) }
+    end
 
     new_arr
   end
@@ -183,7 +189,12 @@ end
 #  d = [1,2,3,4,5,6,5,7,5].my_count {|el| el == 5}
 #  p d
 
-k = (1..5).count(2) {|el| el == 5}
-p k
+# k = (1..5).count(2) {|el| el == 5}
+# p k
 # d = (1..5).my_count(2) {|el| el == 5}
 # p d
+
+p = Proc.new{|el| el*2}
+
+puts [2,4,5].map {|el| el*2}
+puts [2,4,5].my_map {|el| el*2}
