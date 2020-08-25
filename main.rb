@@ -163,7 +163,10 @@ module Enumerable
 
   # my_inject
 
-  def my_inject(num)
+  def my_inject(num = 0)
+    raise LocalJumpError.new "no block given" unless block_given?
+
+
     output = num
 
     my_each do |sum|
@@ -196,5 +199,5 @@ end
 
 p = Proc.new{|el| el*2}
 
-puts [2,4,5].map {|el| el*2}
-puts [2,4,5].my_map {|el| el*2}
+# puts [2,4,5].inject 
+puts (1..5).my_inject(1) {|acc, el| acc *= el}
