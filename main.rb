@@ -64,27 +64,15 @@ module Enumerable
 
   # my_all
 
-  def my_all?
-    # return false unless block_given?
-    return false unless block_given?
-
+  def my_all?(inp = nil)
     output = true
-
-    my_each do |el|
-      unless yield(el)
-        output = false
-        break
-      end
+    
+    if inp
+      my_each { |el| !(el.class <= inp) && (return output = false) } 
+    else
+      my_each { |el| !yield(el) && (return output = false) }
     end
 
-    # while length != 0
-    #   if !yield(first)
-    #     output = false
-    #     break
-    #   else
-    #     shift
-    #   end
-    # end
     output
   end
 
@@ -180,5 +168,6 @@ def multiply_els(arr)
   arr.my_inject(1) { |acc, sum| acc * sum }
 end
 
-# puts %w[a b c].my_inject(:"fsdfs") { |acc, el| acc + el }
-puts [2,5,6].my_inject(5) { |acc, el| acc + el }
+# puts [2,5,6].all? {|el| el < 10}
+# puts [nil].my_all? {|el| }
+
