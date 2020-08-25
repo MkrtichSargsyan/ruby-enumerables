@@ -2,14 +2,16 @@ module Enumerable
   # my-each
 
   def my_each
+    return to_enum unless block_given?
+
     ind = 0
 
-    while ind != length
-      yield self[ind]
+    while ind != self.to_a.length
+      yield self.to_a[ind]
       ind += 1
     end
 
-    self
+    self.to_a
   end
 
   # my_each_with_index
@@ -120,3 +122,6 @@ end
 def multiply_els(arr)
   arr.my_inject(1) { |acc, sum| acc * sum }
 end
+
+{"1" => "January", "2" => "February"}.my_each {|el| puts el}
+# puts (0..5)[2]
