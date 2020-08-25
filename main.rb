@@ -2,22 +2,25 @@ module Enumerable
   # my-each
 
   def my_each
-    return to_enum unless block_given?
+    return to_enum(:my_each) unless block_given?
 
     ind = 0
 
-    while ind != self.to_a.length
-      yield self.to_a[ind]
+    while ind != to_a.length
+      yield to_a[ind]
       ind += 1
     end
 
-    self.to_a
+    self
   end
 
   # my_each_with_index
 
   def my_each_with_index
+    return to_enum(:my_each_with_index) unless block_given?
+
     index = 0
+
     my_each do |el|
       yield(el, index)
       index += 1
@@ -29,14 +32,40 @@ module Enumerable
   # my_select
 
   def my_select
-    filtered_arr = []
+    return to_enum(:my_select) unless block_given?
 
-    while length != 0
-      yield(first) && filtered_arr.push(first)
-      shift
+    filtered=[]
+
+    if self.class == Hash
+      filtered = {}
+
+      my_each do |el|
+        key = el [0]
+        value = el [1]
+        # p "key = #{key}"
+        # p "value = #{value}"
+  
+        if yield(el[0]) 
+        
+            filtered [key] = value
+        end 
+      end
+
+      filtered
+
+      else
+
+        filtered = [] 
+
+        my_each do |el|
+          if yield(el) 
+          
+              filtered.push(el)
+          end 
+        end
     end
 
-    filtered_arr
+    filtered
   end
 
   # my_all
@@ -123,5 +152,17 @@ def multiply_els(arr)
   arr.my_inject(1) { |acc, sum| acc * sum }
 end
 
-{"1" => "January", "2" => "February"}.my_each {|el| puts el}
-# puts (0..5)[2]
+#  k = {2 => '23435',3 => '23dfgdf435'}.select { |el| el == 2}
+#  p k
+#  d = {2 => '23435',3 => '23dfgdf435'}.my_select { |el|  el == 2}
+#  p d
+
+#  k = [3,4,5,6,7].select { |el|  el <5}
+#  p k
+#  d = [3,4,5,6,7].my_select { |el| el < 5}
+#  p d
+
+# k = (1..5).select { |el|  el >3 }
+# p k
+# d = (1..5).my_select { |el|  el > 3}
+# p d
