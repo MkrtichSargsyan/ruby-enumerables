@@ -71,16 +71,27 @@ module Enumerable
   # my_all
 
   def my_all?
+    # return false unless block_given?
+    if !block_given?
+      return false
+    end
     output = true
 
-    while length != 0
-      if !yield(first)
+    my_each do |el|
+      if !yield(el)
         output = false
         break
-      else
-        shift
       end
     end
+
+    # while length != 0
+    #   if !yield(first)
+    #     output = false
+    #     break
+    #   else
+    #     shift
+    #   end
+    # end
     output
   end
 
@@ -115,13 +126,23 @@ module Enumerable
 
   # my_count
 
-  def my_count
-    count = 0
+  def my_count(num = nil)
+   
+    if num
+      selected = my_select { |el| el == num }
+      selected.length
+    else
+      return to_a.length unless block_given?
 
-    my_each do |el|
-      yield(el) && count += 1
+      count = 0
+
+      my_each do |el|
+        yield(el) && count += 1
+      end
+      count
     end
-    count
+
+  
   end
 
   # my_map
@@ -152,17 +173,17 @@ def multiply_els(arr)
   arr.my_inject(1) { |acc, sum| acc * sum }
 end
 
-#  k = {2 => '23435',3 => '23dfgdf435'}.select { |el| el == 2}
+#  k = {2 => '23435',3 => '23dfgdf435'}.count
 #  p k
-#  d = {2 => '23435',3 => '23dfgdf435'}.my_select { |el|  el == 2}
+#  d = {2 => '23435',3 => '23dfgdf435'}.my_count
 #  p d
 
-#  k = [3,4,5,6,7].select { |el|  el <5}
-#  p k
-#  d = [3,4,5,6,7].my_select { |el| el < 5}
+#  k = [1,2,3,4,5,6,7,5].count {|el| el == 5}
+#  p k 
+#  d = [1,2,3,4,5,6,5,7,5].my_count {|el| el == 5}
 #  p d
 
-# k = (1..5).select { |el|  el >3 }
-# p k
-# d = (1..5).my_select { |el|  el > 3}
+k = (1..5).count(2) {|el| el == 5}
+p k
+# d = (1..5).my_count(2) {|el| el == 5}
 # p d
