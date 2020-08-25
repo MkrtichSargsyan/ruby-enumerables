@@ -1,5 +1,9 @@
 module Enumerable
-  # my-each
+  # ############################################################################
+
+  # ***************************     my_each     ********************************
+
+  # ############################################################################
 
   def my_each
     return to_enum(:my_each) unless block_given?
@@ -14,7 +18,11 @@ module Enumerable
     self
   end
 
-  # my_each_with_index
+  # ############################################################################
+
+  # ***********************     my_each_with_endex     *************************
+
+  # ############################################################################
 
   def my_each_with_index
     return to_enum(:my_each_with_index) unless block_given?
@@ -29,7 +37,11 @@ module Enumerable
     self
   end
 
-  # my_select
+  # ############################################################################
+
+  # ***************************     my_select     ******************************
+
+  # ############################################################################
 
   def my_select
     return to_enum(:my_select) unless block_given?
@@ -62,13 +74,17 @@ module Enumerable
     filtered
   end
 
-  # my_all
+  # ############################################################################
+
+  # ***************************     my_all     *********************************
+
+  # ############################################################################
 
   def my_all?(inp = nil)
     output = true
-    
+
     if inp
-      my_each { |el| !(el.class <= inp) && (return output = false) } 
+      my_each { |el| !(el.class <= inp) && (return output = false) }
     else
       my_each { |el| !yield(el) && (return output = false) }
     end
@@ -76,7 +92,11 @@ module Enumerable
     output
   end
 
-  # my_any
+  # ############################################################################
+
+  # ***************************     my_any     *********************************
+
+  # ############################################################################
 
   def my_any?
     output = false
@@ -89,23 +109,42 @@ module Enumerable
     output
   end
 
-  # my_none
+  # ############################################################################
 
-  def my_none?
+  # ***************************     my_none     ********************************
+
+  # ############################################################################
+
+  def my_none?(arg = nil)
     output = true
 
-    while length != 0
-      if yield first
-        output = false
-        break
+    if !arg
+
+      if block_given?
+        # checking if there is no argument but there is block
+        output = false unless my_select { |el| yield(el) }.empty?
       else
-        shift
+        # checking if argument is empty and array is empty returning true
+        output = to_a.empty? ? true : false
+      end
+
+    else
+      # if argument is not empty then checking if arg is Class or object value
+      if arg.is_a?(Class)
+        output = false if !my_select { |el| el.class <= arg }.empty?
+      else
+        output = false if !my_select { |el| el == arg }.empty?
       end
     end
+
     output
   end
 
-  # my_count
+  # ############################################################################
+
+  # ***************************     my_count     *******************************
+
+  # ############################################################################
 
   def my_count(num = nil)
     if num
@@ -123,7 +162,11 @@ module Enumerable
     end
   end
 
-  # my_map
+  # ############################################################################
+
+  # ***************************     my_map     *********************************
+
+  # ############################################################################
 
   def my_map(proc_block = nil)
     return to_enum(:my_map) unless block_given?
@@ -139,11 +182,13 @@ module Enumerable
     new_arr
   end
 
-  # my_inject
+  # ############################################################################
+
+  # ***************************     my_inject     ******************************
+
+  # ############################################################################
 
   def my_inject(num = nil)
-
-
     raise LocalJumpError, 'no block given' unless block_given?
 
     type = self[0].class
@@ -152,7 +197,7 @@ module Enumerable
       num = type == String ? '' : 0
     end
 
-    num.class == Float || Integer ? output = num : output = num.to_s
+    output = num.class == Float || Integer ? num : num.to_s
 
     my_each do |sum|
       output = yield(output, sum)
@@ -162,12 +207,17 @@ module Enumerable
   end
 end
 
-# multiply_els
+# ############################################################################
+
+# ***************************     multiply_els    ****************************
+
+# ############################################################################
 
 def multiply_els(arr)
   arr.my_inject(1) { |acc, sum| acc * sum }
 end
 
-# puts [2,5,6].all? {|el| el < 10}
-# puts [nil].my_all? {|el| }
-
+# puts [2, 2, 2, 2, 2, 2, 2].none?(2)
+# puts ["ff","ff"].none?("fe")
+# puts ["ff","ff"].my_none?()
+# puts [2, 2, 2, 2, 2, 2, 2].my_none?(String)
