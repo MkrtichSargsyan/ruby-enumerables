@@ -81,7 +81,7 @@ module Enumerable
     output = true
 
     if inp
-      my_each { |el| !(el.class > inp) && (return output = false) }
+      my_each { |el| !(el.class <= inp) && (return output = false) }
     else
       my_each { |el| !yield(el) && (return output = false) }
     end
@@ -106,22 +106,21 @@ module Enumerable
       else
         # checking if argument is empty and array is empty returning true
         output = !to_a.empty?
-        filtered_array = my_select { |el| el == nil || el == false }
-        output = false if filtered_array.include? (nil) 
-        output = false if filtered_array.include? (false) 
+        filtered_array = my_select { |el| el.nil? || el == false }
+        output = false if filtered_array.include? nil
+        output = false if filtered_array.include? false
       end
 
     else
       # if argument is not empty then checking if arg is Class or object value
       if arg.is_a?(Class)
-        output = true if !my_select { |el| el.class <= arg }.empty?
+        output = true unless my_select { |el| el.class <= arg }.empty?
       else
-        output = true if !my_select { |el| el == arg }.empty?
+        output = true unless my_select { |el| el == arg }.empty?
       end
     end
 
     output
-
   end
 
   # ############################################################################
@@ -146,9 +145,9 @@ module Enumerable
     else
       # if argument is not empty then checking if arg is Class or object value
       if arg.is_a?(Class)
-        output = false if !my_select { |el| el.class <= arg }.empty?
+        output = false unless my_select { |el| el.class <= arg }.empty?
       else
-        output = false if !my_select { |el| el == arg }.empty?
+        output = false unless my_select { |el| el == arg }.empty?
       end
     end
 
@@ -232,5 +231,5 @@ def multiply_els(arr)
   arr.my_inject(1) { |acc, sum| acc * sum }
 end
 
-puts [1,2].any?(String)
-puts [1,2].my_any?(String)
+puts [1, 2].any?(String)
+puts [1, 2].my_any?(String)
