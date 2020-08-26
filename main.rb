@@ -54,9 +54,6 @@ module Enumerable
       my_each do |el|
         key = el [0]
         value = el [1]
-        # p "key = #{key}"
-        # p "value = #{value}"
-
         filtered [key] = value if yield(el[0])
       end
 
@@ -98,15 +95,31 @@ module Enumerable
 
   # ############################################################################
 
-  def my_any?
+  def my_any?(arg = nil)
     output = false
-    my_each do |el|
-      if yield el
-        output = true
-        break
+
+    if !arg
+
+      if block_given?
+        # checking if there is no argument but there is block
+        output = true unless my_select { |el| yield(el) }.empty?
+      else
+        # checking if argument is empty and array is empty returning true
+        output = !to_a.empty? 
+        output = false if !my_select {|el| el==nil || el == false}.empty?
+      end
+
+    else
+      # if argument is not empty then checking if arg is Class or object value
+      if arg.is_a?(Class)
+        output = true if !my_select { |el| el.class <= arg }.empty?
+      else
+        output = true if !my_select { |el| el == arg }.empty?
       end
     end
+
     output
+
   end
 
   # ############################################################################
@@ -216,8 +229,3 @@ end
 def multiply_els(arr)
   arr.my_inject(1) { |acc, sum| acc * sum }
 end
-
-# puts [2, 2, 2, 2, 2, 2, 2].none?(2)
-# puts ["ff","ff"].none?("fe")
-# puts ["ff","ff"].my_none?()
-# puts [2, 2, 2, 2, 2, 2, 2].my_none?(String)
