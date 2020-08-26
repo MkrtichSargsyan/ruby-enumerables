@@ -226,6 +226,3 @@ end
 def multiply_els(arr)
   arr.my_inject(1) { |acc, sum| acc * sum }
 end
-
-puts [1,2].none?(2)
-puts [1,2].my_none?(2)
