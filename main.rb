@@ -98,17 +98,13 @@ module Enumerable
   def my_any?(arg = nil)
     output = false
 
-    if !arg
+    if !arg # no arguments
 
-      if block_given?
-        # checking if there is no argument but there is block
+      if block_given? # given block
         output = true unless my_select { |el| yield(el) }.empty?
-      else
-        # checking if argument is empty and array is empty returning true
-        output = !to_a.empty?
-        filtered_array = my_select { |el| el.nil? || el == false }
-        output = false if filtered_array.include? nil
-        output = false if filtered_array.include? false
+      else 
+        filtered_array = my_select { |el| el}
+        output = filtered_array.empty? ?  false : true
       end
 
     elsif arg.is_a?(Class)
@@ -226,3 +222,7 @@ end
 def multiply_els(arr)
   arr.my_inject(1) { |acc, sum| acc * sum }
 end
+
+
+puts [2,false].any? { |el| el == false}
+puts [2,false].my_any? { |el| el == false}
