@@ -81,7 +81,7 @@ module Enumerable
     output = true
 
     if inp
-      my_each { |el| !(el.class <= inp) && (return output = false) }
+      my_each { |el| !(el.class > inp) && (return output = false) }
     else
       my_each { |el| !yield(el) && (return output = false) }
     end
@@ -105,8 +105,10 @@ module Enumerable
         output = true unless my_select { |el| yield(el) }.empty?
       else
         # checking if argument is empty and array is empty returning true
-        output = !to_a.empty? 
-        output = false if !my_select {|el| el==nil || el == false}.empty?
+        output = !to_a.empty?
+        filtered_array = my_select { |el| el == nil || el == false }
+        output = false if filtered_array.include? (nil) 
+        output = false if filtered_array.include? (false) 
       end
 
     else
@@ -229,3 +231,6 @@ end
 def multiply_els(arr)
   arr.my_inject(1) { |acc, sum| acc * sum }
 end
+
+puts [1,2].any?(String)
+puts [1,2].my_any?(String)
