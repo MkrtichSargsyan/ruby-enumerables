@@ -104,21 +104,16 @@ module Enumerable
     output = false
 
     if !arg # no arguments
-
-      if block_given? # given block
-        output = true unless my_select { |el| yield(el) }.empty?
-      else 
-        filtered_array = my_select { |el| el}
-        output = filtered_array.empty? ?  false : true
-      end
-
+      
+      filtered_array = if block_given? ? my_select { |el| yield(el) } : my_select { |el| el}
+       
     elsif arg.is_a?(Class)
       # if argument is not empty then checking if arg is Class or object value
-      output = true unless my_select { |el| el.class <= arg }.empty?
+      filtered_array = my_select { |el| el.class <= arg }
     else
-      output = true unless my_select { |el| el == arg }.empty?
+      filtered_array = my_select { |el| el == arg }
     end
-
+    output = true unless filtered_array.empty?
     output
   end
 
