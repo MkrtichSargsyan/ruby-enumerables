@@ -83,7 +83,8 @@ module Enumerable
     if !arg # no arguments
 
       filtered_array = block_given? ? my_select { |el| yield(el) } : my_select { |el| el}
-
+    elsif arg.is_a?(Regexp)
+      filtered_array = my_select { |el| arg === el }
     elsif arg.is_a?(Class)
       # if argument is not empty then checking if arg is Class or object value
       filtered_array = my_select { |el| el.class <= arg}
@@ -105,15 +106,16 @@ module Enumerable
 
     if !arg # no arguments
       
-      filtered_array = if block_given? ? my_select { |el| yield(el) } : my_select { |el| el}
-       
+      filtered_array = block_given? ? my_select { |el| yield(el) } : my_select { |el| el }
+    elsif arg.is_a?(Regexp)
+      filtered_array = my_select { |el| arg === el }
     elsif arg.is_a?(Class)
       # if argument is not empty then checking if arg is Class or object value
       filtered_array = my_select { |el| el.class <= arg }
     else
       filtered_array = my_select { |el| el == arg }
     end
-    output = true unless filtered_array.empty?
+    output = true unless filtered_array.to_a.empty?
     output
   end
 
@@ -129,14 +131,15 @@ module Enumerable
     if !arg
 
       filtered_array = block_given? ? my_select { |el| yield(el) } : my_select { |el| el}
-
+    elsif arg.is_a?(Regexp)
+      filtered_array = my_select { |el| arg === el }
     elsif arg.is_a?(Class)
       filtered_array = my_select { |el| el.class <= arg }
     else
       filtered_array = my_select { |el| el == arg }
     end
 
-    output = true if filtered_array.empty?
+    output = true if filtered_array.to_a.empty?
     output
   end
 
@@ -218,7 +221,13 @@ def multiply_els(arr)
 end
 
 
-puts [3,3].none?
-puts [3,3].my_none?
+puts ["Macintosh", "Macintosh"].none?(/Macintosh/)
+puts ["Macintosh","Macintosh"].my_none?(/Macintosh/)
 
+# firstname = gets
+# lastname = gets
+# puts "name is #{firstname} #{lastname}"
 
+# firstname = gets.chomp
+# lastname = gets.chomp
+# puts "name is #{firstname} #{lastname}"
