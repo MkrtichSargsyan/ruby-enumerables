@@ -77,15 +77,20 @@ module Enumerable
 
   # ############################################################################
 
-  def my_all?(inp = nil)
-    output = true
+  def my_all?(arg = nil)
+    output = false
 
-    if inp
-      my_each { |el| !(el.class.ancestors.include? inp) && (return output = false) }
+    if !arg # no arguments
+
+      filtered_array = block_given? ? my_select { |el| yield(el) } : my_select { |el| el}
+
+    elsif arg.is_a?(Class)
+      # if argument is not empty then checking if arg is Class or object value
+      filtered_array = my_select { |el| el.class <= arg}
     else
-      my_each { |el| !yield(el) && (return output = false) }
+      filtered_array = my_select { |el| el == arg }
     end
-
+    output = true if filtered_array==self.to_a
     output
   end
 
@@ -124,25 +129,19 @@ module Enumerable
   # ############################################################################
 
   def my_none?(arg = nil)
-    output = true
+    output = false
 
     if !arg
 
-      if block_given?
-        # checking if there is no argument but there is block
-        output = false unless my_select { |el| yield(el) }.empty?
-      else
-        # checking if argument is empty and array is empty returning true
-        output = to_a.empty? ? true : false
-      end
+      filtered_array = block_given? ? my_select { |el| yield(el) } : my_select { |el| el}
 
     elsif arg.is_a?(Class)
-      # if argument is not empty then checking if arg is Class or object value
-      output = false unless my_select { |el| el.class <= arg }.empty?
+      filtered_array = my_select { |el| el.class <= arg }
     else
-      output = false unless my_select { |el| el == arg }.empty?
+      filtered_array = my_select { |el| el == arg }
     end
 
+    output = true if filtered_array.empty?
     output
   end
 
@@ -224,5 +223,7 @@ def multiply_els(arr)
 end
 
 
-puts [2,false].any? { |el| el == false}
-puts [2,false].my_any? { |el| el == false}
+puts [3,3].none?
+puts [3,3].my_none?
+
+
