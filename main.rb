@@ -192,45 +192,44 @@ module Enumerable
   # ############################################################################
 
   def my_inject(arg = nil, symb = nil)
-
     output = ''
 
     # if block_given?
 
     if arg.class <= Symbol || (symb.class <= Symbol and arg) # checking if one of arguments is symbol
 
-      if symb==nil
+      if symb.nil?
 
-        ind=1
-        output = self.to_a[0]
-        while ind<to_a.length 
-          output = output.send(arg,self.to_a[ind])
-          ind+=1
+        ind = 1
+        output = to_a[0]
+        while ind < to_a.length
+          output = output.send(arg, to_a[ind])
+          ind += 1
         end
       else
         output = arg
-        my_each {|el| output = output.send(symb,el)}
+        my_each { |el| output = output.send(symb, el) }
       end
 
     elsif block_given?
-     
-      if arg  # checking if block has default value
+
+      if arg # checking if block has default value
         output = arg
-        to_a.my_each {|el| output = yield(output, el)}
+        to_a.my_each { |el| output = yield(output, el) }
       else
 
-        ind=1
-        output = self.to_a[0]
-        while ind < to_a.length 
-          output = yield(output, self.to_a[ind])
-          ind+=1
+        ind = 1
+        output = to_a[0]
+        while ind < to_a.length
+          output = yield(output, to_a[ind])
+          ind += 1
         end
       end
 
     else
-      raise LocalJumpError, 'no block given' 
+      raise LocalJumpError, 'no block given'
     end
-      
+
     output
   end
 end
@@ -245,5 +244,5 @@ def multiply_els(arr)
   arr.my_inject(1) { |acc, sum| acc * sum }
 end
 
-p Range.new(1, 4).my_inject(5, :*)
-p Range.new(1, 4).inject(5, :*)
+p Range.new(1, 4).my_inject(-10, :/)
+p Range.new(1, 4).inject(-10, :/)
