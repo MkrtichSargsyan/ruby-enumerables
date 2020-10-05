@@ -84,4 +84,21 @@ describe Enumerable do
           expect(result).to be_truthy
         end
       end
+
+      describe "#my_none?" do
+        it "returns the predicate of all odd numbers" do
+            result = array.my_none? {|e| e % 2 != 0}
+            expect(result).to be_falsey
+        end
+  
+        it "checks if no elements are divisible by 5" do
+          result = array.my_none? {|e| e % 5 == 0}
+          expect(result).to be_falsey
+        end
+  
+        it "checks if no element has a length bigger than 3" do
+          result = string_array.my_none? {|e| e.length > 3}
+          expect(result).to be_truthy
+        end
+      end
 end
