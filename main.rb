@@ -84,7 +84,9 @@ module Enumerable
 
                        block_given? ? my_select { |el| yield(el) } : my_select { |el| el }
                      elsif arg.is_a?(Regexp)
-                       my_select { |el| arg.match(el) }
+
+                       my_select { |el| arg == el }
+
                      elsif arg.is_a?(Class)
                        # if argument is not empty then checking if arg is Class or object value
                        my_select { |el| el.class <= arg }
@@ -108,7 +110,9 @@ module Enumerable
 
                        block_given? ? my_select { |el| yield(el) } : my_select { |el| el }
                      elsif arg.is_a?(Regexp)
-                       my_select { |el| arg.match(el) }
+
+                       my_select { |el| arg == el }
+
                      elsif arg.is_a?(Class)
                        # if argument is not empty then checking if arg is Class or object value
                        my_select { |el| el.class <= arg }
@@ -132,7 +136,9 @@ module Enumerable
 
                        block_given? ? my_select { |el| yield(el) } : my_select { |el| el }
                      elsif arg.is_a?(Regexp)
-                       my_select { |el| arg.match(el) }
+
+                       my_select { |el| arg == el }
+
                      elsif arg.is_a?(Class)
                        my_select { |el| el.class <= arg }
                      else
@@ -194,7 +200,7 @@ module Enumerable
   def my_inject(arg = nil, symb = nil)
     output = ''
 
-    # if block_given?
+    to_a[0].class
 
     if arg.class <= Symbol || (symb.class <= Symbol and arg) # checking if one of arguments is symbol
 
@@ -243,6 +249,3 @@ end
 def multiply_els(arr)
   arr.my_inject(1) { |acc, sum| acc * sum }
 end
-
-p Range.new(1, 4).my_inject(-10, :/)
-p Range.new(1, 4).inject(-10, :/)
