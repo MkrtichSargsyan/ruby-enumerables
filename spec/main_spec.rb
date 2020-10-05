@@ -3,7 +3,7 @@ require './main.rb'
 describe Enumerable do
     let(:array) { [1, 3, 5, 7] }
     let(:string_array) { %w[cat dog yam egg] }
-    let(:range) { (1..4) }
+    let(:range) { (1..5) }
 
     describe "#my_each" do
       it "It returns multiplcation of the array" do
@@ -99,5 +99,15 @@ describe Enumerable do
             result = array.my_count(7)
             expect(result).to eq(1)
           end
+     end
+
+     describe "#my_map" do
+        it "multiplies all elements in an array by 3" do
+          expect(array.my_map { |el| el * 3}).to eq([3, 9, 15, 21])
+        end
+
+        it "multiplies all elements in a range by 5" do
+          expect(range.my_map { |el| el * 5}).to eq([5, 10, 15, 20, 25])
+        end
      end
 end
