@@ -112,8 +112,6 @@ describe Enumerable do
      end
 
      describe "#my_inject" do
-    
-
         it "multiplies all elements in an array with each other" do
             expect(  array.my_inject(1) { |acc, sum| acc * sum } ).to eql(105)
           end
@@ -121,5 +119,15 @@ describe Enumerable do
           it "adds all elements in a range with each other" do
             expect(  range.my_inject { |acc, sum| acc + sum } ).to eq(15)
           end  
+     end
+
+     describe "#multiply_els" do
+      it "multiplies all elements in an range with each other" do
+        expect(  multiply_els(range)).to eql(120)
+      end
+      
+      it "multiplies all elements in an array with each other" do
+        expect(  multiply_els(array)).to eql(105)
+      end
      end
 end
