@@ -110,4 +110,16 @@ describe Enumerable do
           expect(range.my_map { |el| el * 5}).to eq([5, 10, 15, 20, 25])
         end
      end
+
+     describe "#my_inject" do
+    
+
+        it "multiplies all elements in an array with each other" do
+            expect(  array.my_inject(1) { |acc, sum| acc * sum } ).to eql(105)
+          end
+  
+          it "adds all elements in a range with each other" do
+            expect(  range.my_inject { |acc, sum| acc + sum } ).to eq(15)
+          end  
+     end
 end
