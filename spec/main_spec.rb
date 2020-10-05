@@ -67,4 +67,21 @@ describe Enumerable do
         expect(result).to be_truthy
       end
     end
+
+    describe "#my_any?" do
+        it "returns the predicate of all odd numbers" do
+            result = array.my_any? {|e| e % 2 != 0}
+            expect(result).to be_truthy
+        end
+  
+        it "checks if all elements are divisible by 5" do
+          result = array.my_any? {|e| e % 5 == 0}
+          expect(result).to be_truthy
+        end
+  
+        it "checks if all elements has a length of 3" do
+          result = string_array.my_any? {|e| e.length == 3}
+          expect(result).to be_truthy
+        end
+      end
 end
