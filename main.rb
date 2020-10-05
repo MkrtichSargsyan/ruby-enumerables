@@ -221,9 +221,6 @@ def multiply_els(arr)
 end
 
 
-puts ["Macintosh", "Macintosh"].none?(/Macintosh/)
-puts ["Macintosh","Macintosh"].my_none?(/Macintosh/)
-
 # firstname = gets
 # lastname = gets
 # puts "name is #{firstname} #{lastname}"
@@ -231,3 +228,4 @@ puts ["Macintosh","Macintosh"].my_none?(/Macintosh/)
 # firstname = gets.chomp
 # lastname = gets.chomp
 # puts "name is #{firstname} #{lastname}"
+
