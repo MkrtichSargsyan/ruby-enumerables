@@ -83,5 +83,21 @@ describe Enumerable do
           result = string_array.my_any? {|e| e.length == 3}
           expect(result).to be_truthy
         end
-      end
+     end
+
+     describe "#my_count" do
+        it "it should return number of elements in array" do
+            expect(array.my_count).to eq(4)
+          end
+
+          it "Returns number of element divisble by 2" do
+            result = array.my_count {|e| e % 2 == 0}
+            expect(result).to eq(0)
+          end
+
+          it "Returns the number of time a number exists" do
+            result = array.my_count(7)
+            expect(result).to eq(1)
+          end
+     end
 end
