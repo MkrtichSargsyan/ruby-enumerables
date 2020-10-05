@@ -193,8 +193,8 @@ module Enumerable
 
   def my_inject(num = nil)
     raise LocalJumpError, 'no block given' unless block_given?
-
-    type = self[0].class
+    temp = self.to_a[0].class
+    type = temp
 
     if num.nil?
       num = type == String ? '' : 0
@@ -220,6 +220,7 @@ def multiply_els(arr)
   arr.my_inject(1) { |acc, sum| acc * sum }
 end
 
+puts multiply_els((1..5))
 
 # firstname = gets
 # lastname = gets
