@@ -7,9 +7,9 @@
 - Rubocop
 - VScode
 
-## Live deme 
+## Live dem0
 
-(This is the link to the repl.it)[https://repl.it/repls/DemandingGlassOutcomes]
+(This is the link to the repl.it)[https://repl.it/@MkrtichSargsyan/BlindNavajowhiteCircles]
 
 ## Getting Started
 

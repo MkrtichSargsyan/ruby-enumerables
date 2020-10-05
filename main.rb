@@ -84,7 +84,9 @@ module Enumerable
 
                        block_given? ? my_select { |el| yield(el) } : my_select { |el| el }
                      elsif arg.is_a?(Regexp)
-                       my_select { |el| arg == el }
+
+                     my_select { |el| arg == el }
+
                      elsif arg.is_a?(Class)
                        # if argument is not empty then checking if arg is Class or object value
                        my_select { |el| el.class <= arg }
@@ -108,7 +110,9 @@ module Enumerable
 
                        block_given? ? my_select { |el| yield(el) } : my_select { |el| el }
                      elsif arg.is_a?(Regexp)
-                       my_select { |el| arg == el }
+
+                     my_select { |el| arg == el }
+
                      elsif arg.is_a?(Class)
                        # if argument is not empty then checking if arg is Class or object value
                        my_select { |el| el.class <= arg }
@@ -132,7 +136,9 @@ module Enumerable
 
                        block_given? ? my_select { |el| yield(el) } : my_select { |el| el }
                      elsif arg.is_a?(Regexp)
-                       my_select { |el| arg == el }
+
+                     my_select { |el| arg == el }
+
                      elsif arg.is_a?(Class)
                        my_select { |el| el.class <= arg }
                      else
@@ -191,20 +197,44 @@ module Enumerable
 
   # ############################################################################
 
-  def my_inject(num = nil)
-    raise LocalJumpError, 'no block given' unless block_given?
+  def my_inject(arg = nil, symb = nil)
+    output = ''
 
     temp = to_a[0].class
     type = temp
 
-    if num.nil?
-      num = type == String ? '' : 0
-    end
+    if arg.class <= Symbol || (symb.class <= Symbol and arg) # checking if one of arguments is symbol
 
-    output = num.class == Float || Integer ? num : num.to_s
+      if symb.nil?
 
-    my_each do |sum|
-      output = yield(output, sum)
+        ind = 1
+        output = to_a[0]
+        while ind < to_a.length
+          output = output.send(arg, to_a[ind])
+          ind += 1
+        end
+      else
+        output = arg
+        my_each { |el| output = output.send(symb, el) }
+      end
+
+    elsif block_given?
+
+      if arg # checking if block has default value
+        output = arg
+        to_a.my_each { |el| output = yield(output, el) }
+      else
+
+        ind = 1
+        output = to_a[0]
+        while ind < to_a.length
+          output = yield(output, to_a[ind])
+          ind += 1
+        end
+      end
+
+    else
+      raise LocalJumpError, 'no block given'
     end
 
     output
@@ -221,12 +251,3 @@ def multiply_els(arr)
   arr.my_inject(1) { |acc, sum| acc * sum }
 end
 
-puts multiply_els((1..5))
-
-# firstname = gets
-# lastname = gets
-# puts "name is #{firstname} #{lastname}"
-
-# firstname = gets.chomp
-# lastname = gets.chomp
-# puts "name is #{firstname} #{lastname}"
