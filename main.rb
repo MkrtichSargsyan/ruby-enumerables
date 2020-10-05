@@ -80,18 +80,18 @@ module Enumerable
   def my_all?(arg = nil)
     output = false
 
-    if !arg # no arguments
+    filtered_array = if !arg # no arguments
 
-      filtered_array = block_given? ? my_select { |el| yield(el) } : my_select { |el| el}
-    elsif arg.is_a?(Regexp)
-      filtered_array = my_select { |el| arg === el }
-    elsif arg.is_a?(Class)
-      # if argument is not empty then checking if arg is Class or object value
-      filtered_array = my_select { |el| el.class <= arg}
-    else
-      filtered_array = my_select { |el| el == arg }
-    end
-    output = true if filtered_array==self.to_a
+                       block_given? ? my_select { |el| yield(el) } : my_select { |el| el }
+                     elsif arg.is_a?(Regexp)
+                       my_select { |el| arg == el }
+                     elsif arg.is_a?(Class)
+                       # if argument is not empty then checking if arg is Class or object value
+                       my_select { |el| el.class <= arg }
+                     else
+                       my_select { |el| el == arg }
+                     end
+    output = true if filtered_array == to_a
     output
   end
 
@@ -104,17 +104,17 @@ module Enumerable
   def my_any?(arg = nil)
     output = false
 
-    if !arg # no arguments
-      
-      filtered_array = block_given? ? my_select { |el| yield(el) } : my_select { |el| el }
-    elsif arg.is_a?(Regexp)
-      filtered_array = my_select { |el| arg === el }
-    elsif arg.is_a?(Class)
-      # if argument is not empty then checking if arg is Class or object value
-      filtered_array = my_select { |el| el.class <= arg }
-    else
-      filtered_array = my_select { |el| el == arg }
-    end
+    filtered_array = if !arg # no arguments
+
+                       block_given? ? my_select { |el| yield(el) } : my_select { |el| el }
+                     elsif arg.is_a?(Regexp)
+                       my_select { |el| arg == el }
+                     elsif arg.is_a?(Class)
+                       # if argument is not empty then checking if arg is Class or object value
+                       my_select { |el| el.class <= arg }
+                     else
+                       my_select { |el| el == arg }
+                     end
     output = true unless filtered_array.to_a.empty?
     output
   end
@@ -128,16 +128,16 @@ module Enumerable
   def my_none?(arg = nil)
     output = false
 
-    if !arg
+    filtered_array = if !arg
 
-      filtered_array = block_given? ? my_select { |el| yield(el) } : my_select { |el| el}
-    elsif arg.is_a?(Regexp)
-      filtered_array = my_select { |el| arg === el }
-    elsif arg.is_a?(Class)
-      filtered_array = my_select { |el| el.class <= arg }
-    else
-      filtered_array = my_select { |el| el == arg }
-    end
+                       block_given? ? my_select { |el| yield(el) } : my_select { |el| el }
+                     elsif arg.is_a?(Regexp)
+                       my_select { |el| arg == el }
+                     elsif arg.is_a?(Class)
+                       my_select { |el| el.class <= arg }
+                     else
+                       my_select { |el| el == arg }
+                     end
 
     output = true if filtered_array.to_a.empty?
     output
@@ -193,7 +193,8 @@ module Enumerable
 
   def my_inject(num = nil)
     raise LocalJumpError, 'no block given' unless block_given?
-    temp = self.to_a[0].class
+
+    temp = to_a[0].class
     type = temp
 
     if num.nil?
@@ -229,4 +230,3 @@ puts multiply_els((1..5))
 # firstname = gets.chomp
 # lastname = gets.chomp
 # puts "name is #{firstname} #{lastname}"
-
