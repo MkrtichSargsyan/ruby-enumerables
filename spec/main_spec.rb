@@ -2,7 +2,7 @@ require './main.rb'
 
 describe Enumerable do
     let(:array) { [1, 3, 5, 7] }
-    let(:string_arry) { %w[cat dog yam egg] }
+    let(:string_array) { %w[cat dog yam egg] }
     let(:range) { (1..4) }
 
     describe "#my_each" do
@@ -40,16 +40,31 @@ describe Enumerable do
           expect(array.my_select).to be_an Enumerator
         end
       
-
         it "returns element equal to 3" do
             result = array.my_select {|e| e == 3}
             expect(result).to eq([3])
         end
+
+        it "returns even elements" do
+            result = array.my_select {|e| e % 2 == 0}
+            expect(result).to eq([])
+        end
     end
 
-    it "returns even elements" do
-        result = array.my_select {|e| e % 2 == 0}
-        expect(result).to eq([])
-    end
+    describe "#my_all?" do
+      it "returns the predicate of all odd numbers" do
+          result = array.my_all? {|e| e % 2 != 0}
+          expect(result).to be_truthy
+      end
 
+      it "checks if all elements are divisible by 5" do
+        result = array.my_all? {|e| e % 5 == 0}
+        expect(result).to be_falsey
+      end
+
+      it "checks if all elements has a length of 3" do
+        result = string_array.my_all? {|e| e.length == 3}
+        expect(result).to be_truthy
+      end
+    end
 end
