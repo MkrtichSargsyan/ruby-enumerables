@@ -28,4 +28,28 @@ describe Enumerable do
         expect(array.my_each_with_index).to be_an Enumerator
       end
     end
+
+    describe "#my_select" do
+        it "returns element index" do
+            result = []
+            array.my_select {|e| result << e * 2}
+            expect(result).to eq([2, 6, 10, 14])
+        end
+  
+        it "it should return enumerator if block is not given" do
+          expect(array.my_select).to be_an Enumerator
+        end
+      
+
+        it "returns element equal to 3" do
+            result = array.my_select {|e| e == 3}
+            expect(result).to eq([3])
+        end
+    end
+
+    it "returns even elements" do
+        result = array.my_select {|e| e % 2 == 0}
+        expect(result).to eq([])
+    end
+
 end
